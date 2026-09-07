@@ -8,9 +8,14 @@ export default function LockedInfoPanels() {
 
   const commissionText = `Intern Commission Policy
 
-Interns will earn a commission ranging from 5% to 10%, based on performance. This commission is only paid on deals that are successfully closed — meaning the client has finalized the deal and payment has been received. Bringing in a lead alone does not qualify for any commission.
+Interns will earn a commission ranging from 5% to 15%, based on performance. This commission is only paid on deals that are successfully closed — meaning the client has finalized the deal and payment has been received. Bringing in a lead alone does not qualify for any commission.
 
-The commission percentage depends on the quality and success rate of the leads an intern brings in. The more qualifying, close-ready leads an intern brings — and the more of those leads convert into actual closed deals — the higher their commission percentage will be, up to a maximum of 10%. Leads that do not close, or are low-quality/unqualified, will not earn any commission.`;
+The commission percentage depends on the quality and success rate of the leads an intern brings in:
+
+5% to 10% — for standard performance, based on the quality and close-readiness of the leads brought in. The more qualifying leads an intern brings that convert into actual closed deals, the higher their commission within this range.
+Up to 15% — for exceptional performance, where an intern consistently brings in high-potential leads that convert into paying customers, at management's discretion as a reward for outstanding results.
+
+Leads that do not close, or are low-quality/unqualified, will not earn any commission.`;
 
   return (
     <>
