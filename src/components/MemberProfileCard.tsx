@@ -102,17 +102,8 @@ export default function MemberProfileCard({
       )}
 
       {/* Header */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: '16px',
-          flexWrap: 'wrap',
-          marginBottom: '20px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, minWidth: 0 }}>
+      <div className="profile-card-header">
+        <div className="profile-card-info">
           {/* Avatar */}
           <div
             style={{
@@ -178,7 +169,7 @@ export default function MemberProfileCard({
         </div>
 
         {/* Right side: isolation pill + edit button */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+        <div className="profile-card-actions">
           <div
             style={{
               display: 'inline-flex',

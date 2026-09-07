@@ -158,14 +158,7 @@ export default function CheckInOutWidget({
       </div>
 
       {/* Time Cards */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
-          gap: '16px',
-          marginBottom: '20px',
-        }}
-      >
+      <div className="time-cards-grid">
         {/* Live Timer */}
         <div style={{ background: '#f4f5f7', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', padding: '16px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -245,7 +238,7 @@ export default function CheckInOutWidget({
             onClick={() => setConfirmAction('checkin')}
             disabled={loading}
             className="btn btn-emerald btn-lg"
-            style={{ flex: 1, minWidth: '180px' }}
+            style={{ flex: 1, minWidth: 0, width: '100%' }}
           >
             <Play size={16} fill="currentColor" />
             Check In Now
@@ -255,7 +248,7 @@ export default function CheckInOutWidget({
             onClick={() => setConfirmAction('checkout')}
             disabled={loading}
             className="btn btn-rose btn-lg"
-            style={{ flex: 1, minWidth: '180px' }}
+            style={{ flex: 1, minWidth: 0, width: '100%' }}
           >
             <Square size={16} fill="currentColor" />
             Check Out (End Shift)

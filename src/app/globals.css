@@ -457,6 +457,9 @@ body::after {
   gap: 24px;
   align-items: start;
 }
+.admin-main-grid > div {
+  min-width: 0;
+}
 
 /* Member Dashboard Responsive Grid */
 .member-main-grid {
@@ -464,6 +467,17 @@ body::after {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   gap: 24px;
   margin-bottom: 24px;
+}
+.member-main-grid > div {
+  min-width: 0;
+}
+
+/* CheckInOut Widget Grid */
+.time-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 /* Navigation Utilities */
@@ -529,6 +543,10 @@ body::after {
   .member-main-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .time-cards-grid {
+    grid-template-columns: 1fr;
   }
 
   .chat-bubble {
@@ -660,6 +678,19 @@ body::after {
   .commission-modal-body {
     padding: 16px 14px;
   }
+
+  .profile-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-card-actions {
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -682,5 +713,34 @@ body::after {
     padding: 20px 16px;
   }
 }
+
+/* ==========================================================================
+   Profile Card Utilities
+   ========================================================================== */
+
+.profile-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.profile-card-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 
 
