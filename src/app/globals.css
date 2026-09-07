@@ -574,3 +574,113 @@ body::after {
   }
 }
 
+/* ==========================================================================
+   Login Page & Commission Dialog Responsiveness
+   ========================================================================== */
+
+.login-header {
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.06);
+}
+
+.login-main-grid {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 48px 24px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.login-headline {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.login-card {
+  padding: 34px;
+  max-width: 460px;
+  width: 100%;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+}
+
+.commission-modal-card {
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(9, 30, 66, 0.3);
+  margin: auto;
+}
+
+.commission-modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.commission-tiers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .login-main-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .commission-tiers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commission-modal-body {
+    padding: 16px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-header {
+    padding: 12px 16px;
+  }
+
+  .login-main-grid {
+    padding: 20px 14px;
+    gap: 24px;
+  }
+
+  .login-headline {
+    font-size: 1.85rem;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  .login-card {
+    padding: 20px 16px;
+  }
+}
+
+

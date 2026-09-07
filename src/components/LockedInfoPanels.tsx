@@ -141,17 +141,9 @@ export default function LockedInfoPanels() {
           onClick={() => setActiveModal(null)}
         >
           <div
-            className="glass-panel"
+            className="glass-panel commission-modal-card"
             style={{
-              width: '100%',
-              maxWidth: activeModal === 'commission' ? '640px' : '560px',
-              maxHeight: '92vh',
-              background: '#ffffff',
-              borderRadius: 'var(--radius-lg)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 20px 50px rgba(9, 30, 66, 0.3)',
+              maxWidth: activeModal === 'commission' ? '640px' : '520px',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -208,14 +200,7 @@ export default function LockedInfoPanels() {
             </div>
 
             {/* Modal Body - Scrollable */}
-            <div
-              style={{
-                padding: '20px',
-                overflowY: 'auto',
-                flex: 1,
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
+            <div className="commission-modal-body">
               {activeModal === 'certificate' ? (
                 <div
                   style={{
@@ -385,13 +370,7 @@ export default function LockedInfoPanels() {
                       Commission Tiers Breakdown
                     </h4>
 
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
-                        gap: '12px',
-                      }}
-                    >
+                    <div className="commission-tiers-grid">
                       {/* Tier 1: 5% - 10% */}
                       <div
                         style={{

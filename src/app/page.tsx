@@ -97,17 +97,8 @@ export default function LoginPage() {
       }}
     >
       {/* Top Bar */}
-      <header
-        style={{
-          padding: '16px 28px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid var(--border-subtle)',
-          background: '#ffffff',
-          boxShadow: '0 1px 3px rgba(9, 30, 66, 0.06)',
-        }}
-      >
+      {/* Top Bar */}
+      <header className="login-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
@@ -119,6 +110,7 @@ export default function LoginPage() {
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 2px 6px rgba(0, 82, 204, 0.25)',
+              flexShrink: 0,
             }}
           >
             <StratifyLogo size={22} color="#ffffff" />
@@ -130,19 +122,7 @@ export default function LoginPage() {
       </header>
 
       {/* Main Body */}
-      <main
-        style={{
-          flex: 1,
-          maxWidth: '1200px',
-          width: '100%',
-          margin: '0 auto',
-          padding: '48px 24px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '48px',
-          alignItems: 'center',
-        }}
-      >
+      <main className="login-main-grid">
         {/* Left Column: Value Prop & Features */}
         <div>
           <div
@@ -157,30 +137,21 @@ export default function LoginPage() {
               color: 'var(--accent-primary)',
               fontSize: '0.8rem',
               fontWeight: 700,
-              marginBottom: '20px',
+              marginBottom: '16px',
             }}
           >
             <Zap size={14} />
-            Enterprise Member & Admin Platform
+            Enterprise Member &amp; Admin Platform
           </div>
 
-          <h1
-            style={{
-              fontSize: '2.8rem',
-              fontWeight: 800,
-              lineHeight: 1.18,
-              letterSpacing: '-0.03em',
-              marginBottom: '20px',
-              color: 'var(--text-primary)',
-            }}
-          >
-            Work, Check-In & <br />
+          <h1 className="login-headline">
+            Work, Check-In &amp; <br />
             <span style={{ color: 'var(--accent-primary)' }}>
               Daily Reports Portal
             </span>
           </h1>
 
-          <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '32px' }}>
+          <p style={{ fontSize: '0.98rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '28px' }}>
             Empower members with real-time shift check-in and checkout, automated daily hours tracking, pre-configured isolated profiles, and dedicated Daily Reports task chat threads with management.
           </p>
 
@@ -203,7 +174,7 @@ export default function LoginPage() {
                 <Clock size={20} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.94rem', color: 'var(--text-primary)' }}>Daily Check-In & Live Hours Calculation</div>
+                <div style={{ fontWeight: 700, fontSize: '0.94rem', color: 'var(--text-primary)' }}>Daily Check-In &amp; Live Hours Calculation</div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                   Active shift timer, automated daily hours calculation, and comprehensive timesheet history.
                 </div>
@@ -227,7 +198,7 @@ export default function LoginPage() {
                 <MessageSquare size={20} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.94rem', color: 'var(--text-primary)' }}>"Daily Reports" Task Thread Chat</div>
+                <div style={{ fontWeight: 700, fontSize: '0.94rem', color: 'var(--text-primary)' }}>&ldquo;Daily Reports&rdquo; Task Thread Chat</div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                   Direct communication thread between member and admin for daily updates, blockers, and status tagging.
                 </div>
@@ -253,7 +224,7 @@ export default function LoginPage() {
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.94rem', color: 'var(--text-primary)' }}>Isolated Member Profile Architecture</div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                  Every member's profile description and daily hours remain strictly isolated to themselves and administration.
+                  Every member&apos;s profile description and daily hours remain strictly isolated to themselves and administration.
                 </div>
               </div>
             </div>
@@ -262,13 +233,13 @@ export default function LoginPage() {
 
         {/* Right Column: Login Card & Quick Switch Demo */}
         <div>
-          <div className="glass-panel glass-panel-glow" style={{ padding: '34px', maxWidth: '460px', margin: '0 auto', background: '#ffffff' }}>
+          <div className="glass-panel glass-panel-glow login-card">
             <div style={{ marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
                 Sign In to Portal
               </h2>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                Enter your assigned email & password to access your role-based dashboard.
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                Enter your assigned email &amp; password to access your role-based dashboard.
               </p>
             </div>
 
