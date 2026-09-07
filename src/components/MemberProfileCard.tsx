@@ -153,20 +153,20 @@ export default function MemberProfileCard({
               </div>
             )}
             {isEditing ? (
-              <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '4px', flexWrap: 'wrap' }}>
                 <input
                   className="input-field"
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="Job title"
-                  style={{ fontSize: '0.84rem', padding: '6px 10px', flex: 1 }}
+                  style={{ fontSize: '0.84rem', padding: '6px 10px', flex: '1 1 140px' }}
                 />
                 <input
                   className="input-field"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   placeholder="Department"
-                  style={{ fontSize: '0.84rem', padding: '6px 10px', flex: 1 }}
+                  style={{ fontSize: '0.84rem', padding: '6px 10px', flex: '1 1 140px' }}
                 />
               </div>
             ) : (
@@ -247,7 +247,7 @@ export default function MemberProfileCard({
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
           gap: '12px',
           marginBottom: isEditing ? '16px' : 0,
         }}
@@ -282,7 +282,7 @@ export default function MemberProfileCard({
 
       {/* Date pickers — only shown in edit mode */}
       {isEditing && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '12px', marginTop: '12px' }}>
           <div>
             <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <Calendar size={11} />

@@ -138,7 +138,7 @@ export default function AdminDashboardPage() {
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
       <Navigation currentUser={currentUser} />
 
-      <main style={{ maxWidth: '1360px', width: '100%', margin: '0 auto', padding: '28px 24px', flex: 1 }}>
+      <main className="page-container">
         {/* Admin Header with Admin's Profile Description */}
         <div style={{ marginBottom: '24px' }}>
           <MemberProfileCard
@@ -152,7 +152,7 @@ export default function AdminDashboardPage() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
             gap: '16px',
             marginBottom: '24px',
           }}
@@ -213,14 +213,14 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Tab Controls: Team Roster & Tasks vs Admin Self Check-In */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setActiveTab('roster')}
             className={`btn ${activeTab === 'roster' ? 'btn-primary' : 'btn-ghost'}`}
             style={{ borderRadius: 'var(--radius-sm)' }}
           >
             <Users size={16} />
-            Team Roster & Daily Reports
+            Team Roster &amp; Daily Reports
           </button>
           <button
             onClick={() => setActiveTab('admin_shift')}
@@ -228,7 +228,7 @@ export default function AdminDashboardPage() {
             style={{ borderRadius: 'var(--radius-sm)' }}
           >
             <Clock size={16} />
-            My Admin Shift & Check-In
+            My Admin Shift &amp; Check-In
           </button>
         </div>
 
@@ -250,7 +250,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           /* Team Roster & Member Details Layout */
-          <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '24px', alignItems: 'start' }}>
+          <div className="admin-main-grid">
             {/* Left Column: Member List Switcher */}
             <div className="glass-panel" style={{ padding: '20px' }}>
               <div style={{ marginBottom: '16px' }}>

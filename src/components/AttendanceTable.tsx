@@ -59,7 +59,7 @@ export default function AttendanceTable({
           No attendance records found yet. Check in above to create your first shift entry.
         </div>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
+        <div className="table-responsive-wrapper">
           <table className="data-table">
             <thead>
               <tr>

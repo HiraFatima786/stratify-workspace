@@ -85,7 +85,7 @@ export default function MemberDashboardPage() {
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
       <Navigation currentUser={currentUser} />
 
-      <main style={{ maxWidth: '1360px', width: '100%', margin: '0 auto', padding: '28px 24px', flex: 1 }}>
+      <main className="page-container">
         {/* Important Notice Banner */}
         <div
           style={{
@@ -125,14 +125,7 @@ export default function MemberDashboardPage() {
         </div>
 
         {/* Main Grid: Check-in/Daily Hours on left & Daily Reports Thread on right */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
-            gap: '24px',
-            marginBottom: '24px',
-          }}
-        >
+        <div className="member-main-grid">
           {/* Check In / Check Out & Daily Hours */}
           <div>
             <CheckInOutWidget

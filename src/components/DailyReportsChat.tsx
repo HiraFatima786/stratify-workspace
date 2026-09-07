@@ -95,12 +95,14 @@ export default function DailyReportsChat({
       {/* Header */}
       <div
         style={{
-          padding: '16px 20px',
+          padding: '14px 18px',
           borderBottom: '1px solid var(--border-subtle)',
           background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '8px',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -312,10 +314,12 @@ export default function DailyReportsChat({
           type="submit"
           disabled={!inputText.trim() || sending}
           className="btn btn-primary"
+          title="Send message"
+          aria-label="Send message"
           style={{ padding: '9px 16px' }}
         >
           <Send size={15} />
-          <span>Send</span>
+          <span className="nav-label-desktop">Send</span>
         </button>
       </form>
     </div>

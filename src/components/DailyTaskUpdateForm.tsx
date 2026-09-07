@@ -216,7 +216,7 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
         </div>
 
         {/* Hours + File Link row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
+        <div className="form-row-responsive">
           {/* Hours Worked */}
           <div>
             <label

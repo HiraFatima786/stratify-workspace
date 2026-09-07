@@ -161,7 +161,7 @@ export default function CheckInOutWidget({
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
           gap: '16px',
           marginBottom: '20px',
         }}
@@ -298,7 +298,7 @@ export default function CheckInOutWidget({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '24px',
+            padding: '12px',
           }}
         >
           <div
@@ -307,9 +307,11 @@ export default function CheckInOutWidget({
               background: '#ffffff',
               borderRadius: 'var(--radius-lg)',
               boxShadow: '0 20px 60px rgba(9, 30, 66, 0.28)',
-              padding: '32px',
+              padding: '24px 20px',
               maxWidth: '440px',
               width: '100%',
+              maxHeight: '92vh',
+              overflowY: 'auto',
               position: 'relative',
             }}
           >

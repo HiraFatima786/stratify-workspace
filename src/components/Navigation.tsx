@@ -123,58 +123,52 @@ export default function Navigation({ currentUser }: NavigationProps) {
   };
 
   return (
-    <header
-      style={{
-        borderBottom: '1px solid var(--border-subtle)',
-        background: '#ffffff',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        boxShadow: '0 1px 3px rgba(9, 30, 66, 0.08)',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1360px',
-          margin: '0 auto',
-          padding: '12px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+    <header className="nav-header">
+      <div className="nav-inner">
         {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
           <div
             style={{
-              width: '36px',
-              height: '36px',
+              width: '34px',
+              height: '34px',
               borderRadius: '6px',
               background: 'var(--accent-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 2px 6px rgba(0, 82, 204, 0.3)',
+              flexShrink: 0,
             }}
           >
-            <StratifyLogo size={22} color="#ffffff" />
+            <StratifyLogo size={20} color="#ffffff" />
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span
+                className="nav-brand-title"
+                style={{
+                  fontWeight: 800,
+                  fontSize: '1.18rem',
+                  letterSpacing: '-0.02em',
+                  color: 'var(--text-primary)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 stratify<span style={{ color: 'var(--accent-primary)' }}> workspace</span>
               </span>
               <span className={`badge ${currentUser.role === 'admin' ? 'badge-admin' : 'badge-member'}`}>
-                {currentUser.role === 'admin' ? <Shield size={11} /> : <User size={11} />}
+                {currentUser.role === 'admin' ? <Shield size={10} /> : <User size={10} />}
                 {currentUser.role}
               </span>
             </div>
-            <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Daily Hours & Task Coordination</p>
+            <p className="nav-subtitle-text" style={{ fontSize: '0.73rem', color: 'var(--text-muted)' }}>
+              Daily Hours &amp; Task Coordination
+            </p>
           </div>
         </div>
 
-        {/* User profile & Quick Switch */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* User profile & Actions */}
+        <div className="nav-actions-group">
           {/* Account switcher dropdown — admin or impersonation session */}
           {(currentUser.role === 'admin' || isAdminSession) && (
             <div style={{ position: 'relative' }}>
@@ -183,16 +177,18 @@ export default function Navigation({ currentUser }: NavigationProps) {
                   setDropdownOpen(!dropdownOpen);
                   loadSwitchAccounts();
                 }}
-                className="btn btn-ghost btn-sm"
+                className="btn btn-ghost btn-sm nav-btn-icon-only"
+                title="Switch Team Account"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
                   background: dropdownOpen ? 'var(--accent-blue-soft)' : 'transparent',
+                  padding: '6px 10px',
                 }}
               >
                 <ArrowLeftRight size={14} color="var(--accent-primary)" />
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                <span className="nav-label-desktop" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
                   Switch Account
                 </span>
                 <ChevronDown size={14} color="var(--text-secondary)" />
@@ -205,7 +201,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                     position: 'absolute',
                     right: 0,
                     top: '115%',
-                    width: '290px',
+                    width: 'min(290px, calc(100vw - 24px))',
                     maxHeight: '380px',
                     overflowY: 'auto',
                     padding: '8px',
@@ -261,8 +257,8 @@ export default function Navigation({ currentUser }: NavigationProps) {
                       >
                         <div
                           style={{
-                            width: '30px',
-                            height: '30px',
+                            width: '28px',
+                            height: '28px',
                             borderRadius: '50%',
                             background: p.role === 'admin' ? 'var(--accent-purple)' : 'var(--accent-primary)',
                             color: '#ffffff',
@@ -270,7 +266,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontWeight: 700,
-                            fontSize: '0.76rem',
+                            fontSize: '0.75rem',
                             flexShrink: 0,
                           }}
                         >
@@ -280,7 +276,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span
                               style={{
-                                fontSize: '0.84rem',
+                                fontSize: '0.82rem',
                                 fontWeight: 600,
                                 color: 'var(--text-primary)',
                                 overflow: 'hidden',
@@ -292,7 +288,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                             </span>
                             <span
                               style={{
-                                fontSize: '0.64rem',
+                                fontSize: '0.62rem',
                                 fontWeight: 700,
                                 padding: '1px 5px',
                                 borderRadius: '3px',
@@ -307,7 +303,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                           </div>
                           <div
                             style={{
-                              fontSize: '0.71rem',
+                              fontSize: '0.7rem',
                               color: 'var(--text-muted)',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
@@ -326,14 +322,14 @@ export default function Navigation({ currentUser }: NavigationProps) {
             </div>
           )}
 
-
           {/* User info pill */}
           <div
+            className="nav-user-pill"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '5px 12px 5px 6px',
+              gap: '8px',
+              padding: '4px 10px 4px 5px',
               background: '#f4f5f7',
               border: '1px solid var(--border-subtle)',
               borderRadius: '9999px',
@@ -341,8 +337,8 @@ export default function Navigation({ currentUser }: NavigationProps) {
           >
             <div
               style={{
-                width: '30px',
-                height: '30px',
+                width: '28px',
+                height: '28px',
                 borderRadius: '50%',
                 background: currentUser.role === 'admin' ? 'var(--accent-purple)' : 'var(--accent-primary)',
                 display: 'flex',
@@ -350,35 +346,43 @@ export default function Navigation({ currentUser }: NavigationProps) {
                 justifyContent: 'center',
                 color: '#ffffff',
                 fontWeight: 700,
-                fontSize: '0.82rem',
+                fontSize: '0.8rem',
+                flexShrink: 0,
               }}
             >
               {currentUser.full_name[0]}
             </div>
             <div>
-              <div style={{ fontSize: '0.84rem', fontWeight: 600, lineHeight: 1.2, color: 'var(--text-primary)' }}>{currentUser.full_name}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{currentUser.email}</div>
+              <div className="nav-user-name" style={{ fontSize: '0.82rem', fontWeight: 600, lineHeight: 1.2, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                {currentUser.full_name}
+              </div>
+              <div className="nav-user-email" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                {currentUser.email}
+              </div>
             </div>
           </div>
 
-          {/* Actions */}
-          <div style={{ display: 'flex', gap: '8px' }}>
+          {/* Actions: Change Password & Logout */}
+          <div style={{ display: 'flex', gap: '6px' }}>
             <button
               onClick={handleOpenPasswordModal}
-              className="btn btn-ghost btn-sm"
-              style={{ padding: '6px 12px', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
+              className="btn btn-ghost btn-sm nav-btn-icon-only"
+              title="Change Password"
+              aria-label="Change Password"
+              style={{ padding: '6px 10px', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
             >
               <Key size={14} />
-              Change Password
+              <span className="nav-label-desktop">Change Password</span>
             </button>
             <button
               onClick={handleLogout}
-              className="btn btn-ghost btn-sm"
+              className="btn btn-ghost btn-sm nav-btn-icon-only"
               title="Sign out"
-              style={{ padding: '6px 12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-rose)', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--accent-rose-soft)' }}
+              aria-label="Logout"
+              style={{ padding: '6px 10px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-rose)', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--accent-rose-soft)' }}
             >
               <LogOut size={14} />
-              Logout
+              <span className="nav-label-desktop">Logout</span>
             </button>
           </div>
         </div>
@@ -386,17 +390,43 @@ export default function Navigation({ currentUser }: NavigationProps) {
 
       {/* Change Password Modal */}
       {showPasswordModal && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(9, 30, 66, 0.54)', zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(4px)', padding: '20px'
-        }}>
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(9, 30, 66, 0.58)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(4px)',
+            padding: '12px',
+          }}
+          onClick={handleClosePasswordModal}
+        >
           <div
             className="glass-panel"
-            style={{ width: '100%', maxWidth: '420px', background: '#ffffff', borderRadius: 'var(--radius-lg)', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            style={{
+              width: '100%',
+              maxWidth: '440px',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              background: '#ffffff',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: '0 20px 40px rgba(9, 30, 66, 0.25)',
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div
+              style={{
+                padding: '16px 20px',
+                borderBottom: '1px solid var(--border-subtle)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: '#f4f5f7',
+              }}
+            >
               <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                 <Key size={18} color="var(--accent-primary)" /> Change Password
               </h3>
@@ -404,6 +434,7 @@ export default function Navigation({ currentUser }: NavigationProps) {
                 type="button"
                 onClick={handleClosePasswordModal}
                 disabled={passwordStatus === 'saving'}
+                aria-label="Close"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: '4px' }}
               >
                 <X size={18} />

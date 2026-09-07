@@ -419,3 +419,158 @@ body::after {
 .data-table tr:hover td {
   background: #f8f9fa;
 }
+
+/* ==========================================================================
+   Responsive Utilities & Breakpoints
+   ========================================================================== */
+
+.page-container {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 24px;
+  flex: 1;
+}
+
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-sm);
+}
+
+.table-responsive-wrapper table {
+  min-width: 600px;
+}
+
+/* Responsive Form Rows */
+.form-row-responsive {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px;
+}
+
+/* Admin Dashboard Responsive Grid */
+.admin-main-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Member Dashboard Responsive Grid */
+.member-main-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Navigation Utilities */
+.nav-header {
+  border-bottom: 1px solid var(--border-subtle);
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.08);
+}
+
+.nav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nav-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Tablet & Mobile Screens (<= 1024px) */
+@media (max-width: 1024px) {
+  .admin-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px 12px;
+  }
+
+  .nav-inner {
+    padding: 8px 12px;
+  }
+
+  .nav-subtitle-text {
+    display: none !important;
+  }
+
+  .nav-user-email {
+    display: none !important;
+  }
+
+  .nav-label-desktop {
+    display: none !important;
+  }
+
+  .form-row-responsive {
+    grid-template-columns: 1fr;
+  }
+
+  .member-main-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .chat-bubble {
+    max-width: 90%;
+  }
+
+  .chat-thread-container {
+    height: 460px;
+  }
+}
+
+/* Small Mobile Screens (<= 480px) */
+@media (max-width: 480px) {
+  .page-container {
+    padding: 12px 10px;
+  }
+
+  .nav-user-pill {
+    padding: 4px 6px !important;
+  }
+
+  .nav-user-name {
+    display: none !important;
+  }
+
+  .nav-btn-icon-only {
+    padding: 6px 8px !important;
+  }
+
+  .nav-brand-title {
+    font-size: 1.05rem !important;
+  }
+
+  .badge {
+    padding: 2px 5px;
+    font-size: 0.65rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+}
+
