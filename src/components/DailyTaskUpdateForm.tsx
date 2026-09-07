@@ -197,7 +197,7 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
               setWorkDescription(e.target.value);
               if (errors.workDescription) setErrors((prev) => ({ ...prev, workDescription: undefined }));
             }}
-            placeholder="e.g. Completed the authentication flow, fixed 3 bug tickets, reviewed PR #142, updated the API documentation..."
+            placeholder="Describe the work you completed today, including details of any leads you contacted or followed up with, and mention which leads are converting. This helps us track daily progress and understand why leads may or may not be converting"
             rows={3}
             style={{
               resize: 'vertical',
@@ -270,7 +270,7 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
               className="input-field"
               value={fileLink}
               onChange={(e) => setFileLink(e.target.value)}
-              placeholder="Google Docs link, Google Drive — paste here your daily report..."
+              placeholder="paste your daily reports links here either on google docs or google drive"
               style={{ fontSize: '0.875rem' }}
             />
           </div>
