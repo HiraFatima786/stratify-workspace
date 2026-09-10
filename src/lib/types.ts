@@ -55,5 +55,16 @@ export interface DailyUpdate {
   hours_worked: number;
   work_description: string;
   file_link?: string;
+  admin_checked?: boolean;
+  created_at: string;
+}
+
+export interface DailyUpdateComment {
+  id: string;
+  daily_update_id: string;
+  author_id: string;
+  author_name: string;
+  author_role: UserRole;
+  content: string;
   created_at: string;
 }

@@ -13,7 +13,10 @@ import {
   Sparkles,
   FileText,
   AlertCircle,
+  History,
+  ChevronDown,
 } from 'lucide-react';
+import DailyUpdateCard from './DailyUpdateCard';
 
 interface DailyTaskUpdateFormProps {
   currentUser: Profile;
@@ -21,6 +24,7 @@ interface DailyTaskUpdateFormProps {
 
 export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateFormProps) {
   const [updates, setUpdates] = useState<DailyUpdate[]>([]);
+  const [allUpdates, setAllUpdates] = useState<DailyUpdate[]>([]);
   const [workDescription, setWorkDescription] = useState('');
   const [hoursWorked, setHoursWorked] = useState('');
   const [fileLink, setFileLink] = useState('');
@@ -35,17 +39,27 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
     setUpdates(data);
   }, [currentUser.id, today]);
 
+  const loadAllUpdates = useCallback(async () => {
+    const data = await getDailyUpdates(currentUser.id);
+    // Exclude today's updates since they're shown separately
+    setAllUpdates(data.filter((u) => u.date !== today));
+  }, [currentUser.id, today]);
+
   useEffect(() => {
     loadUpdates();
+    loadAllUpdates();
 
     const handleUpdated = (e: Event) => {
       const ce = e as CustomEvent<{ userId: string }>;
-      if (!ce.detail || ce.detail.userId === currentUser.id) loadUpdates();
+      if (!ce.detail || ce.detail.userId === currentUser.id) {
+        loadUpdates();
+        loadAllUpdates();
+      }
     };
 
     window.addEventListener('teamsflow_daily_update_added', handleUpdated);
     return () => window.removeEventListener('teamsflow_daily_update_added', handleUpdated);
-  }, [loadUpdates, currentUser.id]);
+  }, [loadUpdates, loadAllUpdates, currentUser.id]);
 
   const validate = (): boolean => {
     const newErrors: { workDescription?: string; hoursWorked?: string } = {};
@@ -83,6 +97,15 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
   };
 
   const totalHoursToday = updates.reduce((sum, u) => sum + Number(u.hours_worked), 0);
+
+  // Group past updates by date
+  const pastUpdatesByDate: Record<string, DailyUpdate[]> = {};
+  allUpdates.forEach((u) => {
+    if (!pastUpdatesByDate[u.date]) pastUpdatesByDate[u.date] = [];
+    pastUpdatesByDate[u.date].push(u);
+  });
+  // Sort dates descending (most recent first)
+  const sortedDates = Object.keys(pastUpdatesByDate).sort((a, b) => b.localeCompare(a));
 
   return (
     <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
@@ -336,106 +359,13 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
 
           <div style={{ maxHeight: '260px', overflowY: 'auto' }}>
             {updates.map((update, idx) => (
-              <div
-                key={update.id}
-                style={{
-                  padding: '12px 20px',
-                  borderTop: idx > 0 ? '1px solid #f0f1f3' : undefined,
-                  display: 'flex',
-                  gap: '14px',
-                  alignItems: 'flex-start',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#f8f9fa')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = '')}
-              >
-                {/* Hours badge */}
-                <div
-                  style={{
-                    minWidth: '54px',
-                    height: '54px',
-                    borderRadius: 'var(--radius-sm)',
-                    background: 'var(--accent-emerald-soft)',
-                    border: '1px solid #abf5d1',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  <span style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--accent-emerald)', lineHeight: 1 }}>
-                    {Number(update.hours_worked).toFixed(1)}
-                  </span>
-                  <span style={{ fontSize: '0.62rem', fontWeight: 700, color: 'var(--accent-emerald)', opacity: 0.7 }}>hrs</span>
-                </div>
-
-                {/* Content */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--text-primary)',
-                      lineHeight: 1.5,
-                      marginBottom: update.file_link ? '6px' : 0,
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {update.work_description}
-                  </p>
-                  {update.file_link && (
-                    <a
-                      href={update.file_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        fontSize: '0.76rem',
-                        color: 'var(--accent-primary)',
-                        fontWeight: 600,
-                        textDecoration: 'none',
-                        background: 'var(--accent-blue-soft)',
-                        border: '1px solid var(--accent-blue-border)',
-                        padding: '2px 8px',
-                        borderRadius: 'var(--radius-xs)',
-                        maxWidth: '100%',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <Link2 size={11} />
-                      {update.file_link.replace(/^https?:\/\//, '')}
-                    </a>
-                  )}
-                  <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    {new Date(update.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-
-                {/* Delete */}
-                <button
-                  type="button"
-                  onClick={() => handleDelete(update.id)}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: '4px',
-                    borderRadius: 'var(--radius-xs)',
-                    color: '#c1c7d0',
-                    flexShrink: 0,
-                    transition: 'color 0.15s',
-                  }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = 'var(--accent-rose)')}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = '#c1c7d0')}
-                  title="Delete this entry"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
+              <DailyUpdateCard 
+                key={update.id} 
+                update={update} 
+                currentUser={currentUser} 
+                idx={idx} 
+                onDelete={handleDelete} 
+              />
             ))}
           </div>
         </div>
@@ -454,6 +384,74 @@ export default function DailyTaskUpdateForm({ currentUser }: DailyTaskUpdateForm
         >
           <ClipboardList size={20} style={{ margin: '0 auto 6px', opacity: 0.4 }} />
           <p>No updates submitted yet today. Fill in the form above to log your first entry.</p>
+        </div>
+      )}
+
+      {/* Link to All Daily Tasks Page */}
+      {(updates.length > 0 || allUpdates.length > 0) && (
+        <div
+          style={{
+            borderTop: '2px solid var(--border-subtle)',
+          }}
+        >
+          <a
+            href="/dashboard/member/past-updates"
+            style={{
+              width: '100%',
+              padding: '14px 20px',
+              background: '#f4f5f7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              transition: 'background 0.15s',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'var(--accent-purple-soft)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--accent-purple)',
+                }}
+              >
+                <History size={16} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)', display: 'block' }}>
+                  My All Daily Tasks
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
+                    display: 'block',
+                    fontWeight: 500,
+                  }}
+                >
+                  View all submitted tasks across all days
+                </span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  color: 'var(--accent-purple)',
+                }}
+              >
+                {(updates.length + allUpdates.length)} {(updates.length + allUpdates.length) === 1 ? 'task' : 'tasks'}
+              </span>
+              <ChevronDown size={16} color="var(--text-muted)" style={{ transform: 'rotate(-90deg)' }} />
+            </div>
+          </a>
         </div>
       )}
     </div>

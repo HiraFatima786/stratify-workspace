@@ -9,9 +9,12 @@ import {
   getAttendanceHistory,
   calculateTodaySummary,
   formatMinutes,
+  getAllDailyUpdates,
 } from '@/lib/data-service';
+import { DailyUpdate } from '@/lib/types';
 import Navigation from '@/components/Navigation';
 import MemberProfileCard from '@/components/MemberProfileCard';
+import DailyUpdateCard from '@/components/DailyUpdateCard';
 import DailyReportsChat from '@/components/DailyReportsChat';
 import AttendanceTable from '@/components/AttendanceTable';
 import CheckInOutWidget from '@/components/CheckInOutWidget';
@@ -27,6 +30,7 @@ export default function AdminDashboardPage() {
   const [currentUser, setCurrentUser] = useState<Profile | null>(null);
   const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
   const [allAttendance, setAllAttendance] = useState<AttendanceRecord[]>([]);
+  const [allUpdates, setAllUpdates] = useState<DailyUpdate[]>([]);
   const [selectedMember, setSelectedMember] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState<'roster' | 'admin_shift'>('roster');
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,9 +51,11 @@ export default function AdminDashboardPage() {
 
     const members = await getAllMembers();
     const attendance = await getAttendanceHistory();
+    const updates = await getAllDailyUpdates();
 
     setAllProfiles(members);
     setAllAttendance(attendance);
+    setAllUpdates(updates);
 
     // Pick first member by default if none selected
     const currentSelected = selectedMemberRef.current;
@@ -71,13 +77,18 @@ export default function AdminDashboardPage() {
     const handleAttendanceChange = () => {
       getAttendanceHistory().then(setAllAttendance);
     };
+    const handleDailyUpdateAdded = () => {
+      getAllDailyUpdates().then(setAllUpdates);
+    };
 
     window.addEventListener('teamsflow_auth_changed', handleAuthChange);
     window.addEventListener('teamsflow_attendance_changed', handleAttendanceChange);
+    window.addEventListener('teamsflow_daily_update_added', handleDailyUpdateAdded);
 
     return () => {
       window.removeEventListener('teamsflow_auth_changed', handleAuthChange);
       window.removeEventListener('teamsflow_attendance_changed', handleAttendanceChange);
+      window.removeEventListener('teamsflow_daily_update_added', handleDailyUpdateAdded);
     };
   }, [loadData]);
 
@@ -414,6 +425,34 @@ export default function AdminDashboardPage() {
                     memberName={selectedMember.full_name}
                     currentUser={currentUser}
                   />
+                </div>
+
+                {/* Member's Daily Tasks */}
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>
+                    {selectedMember.full_name}'s Recent Daily Updates
+                  </h3>
+                  <div className="glass-panel" style={{ overflow: 'hidden' }}>
+                    {(() => {
+                      const memberUpdates = allUpdates.filter(u => u.user_id === selectedMember.id).slice(0, 5); // Show last 5
+                      if (memberUpdates.length === 0) {
+                        return (
+                          <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                            No recent updates submitted by this member.
+                          </div>
+                        );
+                      }
+                      return memberUpdates.map((update, idx) => (
+                        <DailyUpdateCard 
+                          key={update.id} 
+                          update={update} 
+                          currentUser={currentUser} 
+                          idx={idx} 
+                          isPastUpdate={true} 
+                        />
+                      ));
+                    })()}
+                  </div>
                 </div>
 
                 {/* Member's Attendance Records */}

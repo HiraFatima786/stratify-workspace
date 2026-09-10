@@ -1,7 +1,7 @@
 'use client';
 
 import { supabase, isSupabaseConfigured } from './supabase/client';
-import { Profile, AttendanceRecord, DailyReportMessage, DailyHoursSummary, DailyUpdate } from './types';
+import { Profile, AttendanceRecord, DailyReportMessage, DailyHoursSummary, DailyUpdate, DailyUpdateComment } from './types';
 
 // Pre-seeded Demo Profiles
 export const SEED_PROFILES: Profile[] = [
@@ -76,6 +76,7 @@ const STORAGE_KEYS = {
   ATTENDANCE: 'teamsflow_attendance',
   MESSAGES: 'teamsflow_messages',
   DAILY_UPDATES: 'teamsflow_daily_updates',
+  DAILY_UPDATE_COMMENTS: 'teamsflow_daily_update_comments',
 };
 
 // Initial default attendance records for realism in demo
@@ -913,6 +914,7 @@ export async function submitDailyUpdate(
     work_description: workDescription.trim(),
     hours_worked: hoursWorked,
     file_link: fileLink?.trim() || '',
+    admin_checked: false,
     created_at: now.toISOString(),
   };
 
@@ -944,5 +946,134 @@ export async function deleteDailyUpdate(updateId: string, userId: string): Promi
   const filtered = updates.filter((u) => !(u.id === updateId && u.user_id === userId));
   localStorage.setItem(STORAGE_KEYS.DAILY_UPDATES, JSON.stringify(filtered));
   window.dispatchEvent(new CustomEvent('teamsflow_daily_update_added', { detail: { userId } }));
+  return true;
+}
+
+export async function toggleDailyUpdateAdminCheck(updateId: string, checked: boolean): Promise<boolean> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error } = await supabase
+        .from('daily_updates')
+        .update({ admin_checked: checked })
+        .eq('id', updateId);
+      if (!error) {
+        window.dispatchEvent(new CustomEvent('teamsflow_daily_update_added'));
+        return true;
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  initLocalStorage();
+  const updates: DailyUpdate[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_UPDATES) || '[]');
+  const index = updates.findIndex((u) => u.id === updateId);
+  if (index !== -1) {
+    updates[index].admin_checked = checked;
+    localStorage.setItem(STORAGE_KEYS.DAILY_UPDATES, JSON.stringify(updates));
+    window.dispatchEvent(new CustomEvent('teamsflow_daily_update_added'));
+    return true;
+  }
+  return false;
+}
+
+// -------------------------------------------------------------
+// Daily Update Comments API
+// -------------------------------------------------------------
+
+export async function getDailyUpdateComments(updateId: string): Promise<DailyUpdateComment[]> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data } = await supabase
+        .from('daily_update_comments')
+        .select('*')
+        .eq('daily_update_id', updateId)
+        .order('created_at', { ascending: true });
+      if (data) return data;
+    } catch {
+      // fallback
+    }
+  }
+
+  initLocalStorage();
+  const comments: DailyUpdateComment[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_UPDATE_COMMENTS) || '[]');
+  return comments.filter((c) => c.daily_update_id === updateId)
+    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+}
+
+export async function addDailyUpdateComment(
+  updateId: string,
+  author: Profile,
+  content: string
+): Promise<DailyUpdateComment> {
+  const now = new Date();
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('daily_update_comments')
+        .insert({
+          daily_update_id: updateId,
+          author_id: author.id,
+          author_name: author.full_name,
+          author_role: author.role,
+          content: content.trim(),
+        })
+        .select()
+        .single();
+      if (!error && data) {
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('teamsflow_daily_update_comment_added', { detail: { updateId } }));
+        }
+        return data;
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  initLocalStorage();
+  const comments: DailyUpdateComment[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_UPDATE_COMMENTS) || '[]');
+
+  const newComment: DailyUpdateComment = {
+    id: 'cmt-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+    daily_update_id: updateId,
+    author_id: author.id,
+    author_name: author.full_name,
+    author_role: author.role,
+    content: content.trim(),
+    created_at: now.toISOString(),
+  };
+
+  comments.push(newComment);
+  localStorage.setItem(STORAGE_KEYS.DAILY_UPDATE_COMMENTS, JSON.stringify(comments));
+  
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('teamsflow_daily_update_comment_added', { detail: { updateId } }));
+  }
+  
+  return newComment;
+}
+
+export async function deleteDailyUpdateComment(commentId: string, authorId: string): Promise<boolean> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error } = await supabase
+        .from('daily_update_comments')
+        .delete()
+        .eq('id', commentId)
+        .eq('author_id', authorId);
+      if (!error) {
+        return true;
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  initLocalStorage();
+  const comments: DailyUpdateComment[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.DAILY_UPDATE_COMMENTS) || '[]');
+  const filtered = comments.filter((c) => !(c.id === commentId && c.author_id === authorId));
+  localStorage.setItem(STORAGE_KEYS.DAILY_UPDATE_COMMENTS, JSON.stringify(filtered));
   return true;
 }

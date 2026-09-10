@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Profile } from '@/lib/types';
 import { logoutUser, updateUserPassword, getAllMembers, switchCurrentUser, SEED_PROFILES } from '@/lib/data-service';
-import { Shield, User, LogOut, Check, ChevronDown, Key, X, AlertCircle, Eye, EyeOff, ArrowLeftRight } from 'lucide-react';
+import { Shield, User, LogOut, Check, ChevronDown, Key, X, AlertCircle, Eye, EyeOff, ArrowLeftRight, Users } from 'lucide-react';
 import StratifyLogo from './StratifyLogo';
 
 interface NavigationProps {
@@ -362,8 +362,20 @@ export default function Navigation({ currentUser }: NavigationProps) {
             </div>
           </div>
 
-          {/* Actions: Change Password & Logout */}
+          {/* Actions: User Management (Admin only), Change Password & Logout */}
           <div style={{ display: 'flex', gap: '6px' }}>
+            {currentUser.role === 'admin' && (
+              <button
+                onClick={() => router.push('/dashboard/admin/users')}
+                className="btn btn-ghost btn-sm nav-btn-icon-only"
+                title="User Management"
+                aria-label="User Management"
+                style={{ padding: '6px 10px', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <Users size={14} />
+                <span className="nav-label-desktop">Manage Users</span>
+              </button>
+            )}
             <button
               onClick={handleOpenPasswordModal}
               className="btn btn-ghost btn-sm nav-btn-icon-only"

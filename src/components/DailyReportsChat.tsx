@@ -70,6 +70,19 @@ export default function DailyReportsChat({
     prevMessageCountRef.current = currentCount;
   }, [messages]);
 
+  const getActualSender = (): Profile => {
+    if (typeof window === 'undefined') return currentUser;
+    const adminSessionStr = localStorage.getItem('stratify_admin_session');
+    if (adminSessionStr) {
+      try {
+        return JSON.parse(adminSessionStr);
+      } catch {
+        return currentUser;
+      }
+    }
+    return currentUser;
+  };
+
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!inputText.trim() || sending) return;
@@ -79,7 +92,7 @@ export default function DailyReportsChat({
     setSending(true);
 
     try {
-      await sendDailyReportMessage(memberId, currentUser, content);
+      await sendDailyReportMessage(memberId, getActualSender(), content);
       await loadMessages();
     } finally {
       setSending(false);
@@ -198,7 +211,7 @@ export default function DailyReportsChat({
                   }}
                 >
                   <span style={{ fontWeight: 700, color: isSelf ? 'var(--accent-primary)' : 'var(--text-primary)' }}>
-                    {isSelf ? 'You' : msg.sender_name}
+                    {isSelf ? 'You' : isAdminSender ? 'Admin' : msg.sender_name}
                   </span>
                   <span className={`badge ${isAdminSender ? 'badge-admin' : 'badge-member'}`} style={{ fontSize: '0.62rem', padding: '1px 5px' }}>
                     {isAdminSender ? <Shield size={9} /> : <User size={9} />}

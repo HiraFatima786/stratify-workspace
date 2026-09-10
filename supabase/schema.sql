@@ -174,6 +174,7 @@ CREATE TABLE IF NOT EXISTS public.daily_updates (
   work_description TEXT NOT NULL,
   hours_worked NUMERIC(4, 1) NOT NULL CHECK (hours_worked >= 0 AND hours_worked <= 24),
   file_link TEXT DEFAULT '',
+  admin_checked BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -197,7 +198,54 @@ CREATE POLICY "Members and admins can delete own daily updates"
   ON public.daily_updates FOR DELETE
   USING (public.is_admin() OR auth.uid() = user_id);
 
--- 10. Add tables to realtime publication
+-- 10. Create daily_update_comments table (Comments on Daily Task Updates)
+CREATE TABLE IF NOT EXISTS public.daily_update_comments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  daily_update_id UUID REFERENCES public.daily_updates(id) ON DELETE CASCADE NOT NULL,
+  author_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  author_name TEXT NOT NULL,
+  author_role TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.daily_update_comments ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for Daily Update Comments
+DROP POLICY IF EXISTS "Admins and task owners can view comments" ON public.daily_update_comments;
+DROP POLICY IF EXISTS "Admins and task owners can insert comments" ON public.daily_update_comments;
+DROP POLICY IF EXISTS "Authors and admins can delete comments" ON public.daily_update_comments;
+DROP POLICY IF EXISTS "Everyone can view comments" ON public.daily_update_comments;
+DROP POLICY IF EXISTS "Members and admins can insert comments" ON public.daily_update_comments;
+
+CREATE POLICY "Admins and task owners can view comments"
+  ON public.daily_update_comments FOR SELECT
+  USING (
+    public.is_admin() OR 
+    EXISTS (
+      SELECT 1 FROM public.daily_updates
+      WHERE id = daily_update_comments.daily_update_id
+      AND user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Admins and task owners can insert comments"
+  ON public.daily_update_comments FOR INSERT
+  WITH CHECK (
+    public.is_admin() OR 
+    (auth.uid() = author_id AND EXISTS (
+      SELECT 1 FROM public.daily_updates
+      WHERE id = daily_update_id
+      AND user_id = auth.uid()
+    ))
+  );
+
+CREATE POLICY "Authors and admins can delete comments"
+  ON public.daily_update_comments FOR DELETE
+  USING (public.is_admin() OR auth.uid() = author_id);
+
+-- 11. Add tables to realtime publication
 ALTER PUBLICATION supabase_realtime ADD TABLE public.attendance;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.daily_report_messages;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.daily_updates;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.daily_update_comments;
